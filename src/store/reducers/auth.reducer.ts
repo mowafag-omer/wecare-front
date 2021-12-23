@@ -1,7 +1,7 @@
 import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL } from '../types'
 import {action} from "../types/type"
 
-const token = JSON.parse(localStorage.getItem("token"))
+const token = localStorage.getItem("token") || null
 
 const initialState = token ? {isAuth: true, token} : {isAuth: false, token: null} 
 
