@@ -52,7 +52,7 @@ export default function SignUp() {
       setResponseBddStatus(axiosResponse.status)
       
       
-      if(axiosResponse.status == 201){
+      if(axiosResponse.status === 201){
         setResponseBddStatus(201);
       }else{
         console.log("save data doesnt work");

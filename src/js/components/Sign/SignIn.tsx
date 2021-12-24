@@ -1,4 +1,5 @@
 import * as React from 'react';
+// import { useSelector, useDispatch } from 'react-redux'
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -13,16 +14,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as Lien, Navigate } from 'react-router-dom'
-import api from "../../utils/api"
-
-
-
-
+import api from "../../utils/api" 
+// import LOGIN_SUCCESS from '../../..store/types'
 
 const theme = createTheme();
 
 export default function SignIn() {
-
+  // const dispatch = useDispatch()
   const [errPass, seterrPass] = React.useState<String | null>(null)
   const [isErrorEmail, setIsErrorEmail] = React.useState<String | null>(null)
   const [responseBddStatus,setResponseBddStatus]= React.useState<Number | null>(null);
@@ -52,23 +50,21 @@ export default function SignIn() {
     }
 
     try {
-      const axiosResponse = await api.post("/users/auth/login", body)
+      const axiosResponse = await api.post("/users/auth/login",body)
       
       console.log(axiosResponse.data);
-      console.log(axiosResponse.status);
+      console.log('statuslog', axiosResponse.status);
       setResponseBddStatus(axiosResponse.status)
       
       
-      if(axiosResponse.status == 200){
+      if(axiosResponse.status === 200){
         setResponseBddStatus(200);
       }else{
         console.log("save data doesnt work");
       }
       
-      
-      
-    } catch (err) {
-      console.error(err)
+    } catch (err: any) {
+      console.error(err);
     }
   }
 
@@ -99,6 +95,7 @@ export default function SignIn() {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
+              error={isErrorEmail ? true : false}
               margin="normal"
               required
               fullWidth
@@ -107,8 +104,10 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
+              helperText={isErrorEmail ? isErrorEmail : null}
             />
             <TextField
+              error={errPass ? true : false}
               margin="normal"
               required
               fullWidth
@@ -117,6 +116,7 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
+              helperText={errPass ? errPass : null}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
