@@ -18,7 +18,6 @@ const theme = createTheme();
 export default function SignUp() {
   const [errPass, seterrPass] = React.useState<String | null>(null)
   const [isErrorEmail, setIsErrorEmail] = React.useState<String | null>(null)
-  const [responseBddOk,setResponseBddOk]= React.useState<Boolean>(false);
   const [responseBddStatus,setResponseBddStatus]= React.useState<Number>(404);
 
 

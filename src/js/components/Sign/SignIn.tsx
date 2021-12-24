@@ -12,7 +12,9 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link as Lien } from 'react-router-dom'
+import { Link as Lien, Navigate } from 'react-router-dom'
+import api from "../../utils/api"
+
 
 
 
@@ -20,15 +22,62 @@ import { Link as Lien } from 'react-router-dom'
 const theme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+
+  const [errPass, seterrPass] = React.useState<String | null>(null)
+  const [isErrorEmail, setIsErrorEmail] = React.useState<String | null>(null)
+  const [responseBddStatus,setResponseBddStatus]= React.useState<Number | null>(null);
+
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
+    const body = {
       email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+      password: data.get('password')
+    }
+
+    if(!String(data.get('email')).length) {      
+      setIsErrorEmail('Your email is invalid or empty!')
+      return false
+    } else {
+      setIsErrorEmail(null)
+    }
+
+    if(!String(data.get('password')).length) {
+      seterrPass('Your password is empty !')
+      return false
+    } else {
+      seterrPass(null)
+    }
+
+    try {
+      const axiosResponse = await api.post("/users/auth/login", body)
+      
+      console.log(axiosResponse.data);
+      console.log(axiosResponse.status);
+      setResponseBddStatus(axiosResponse.status)
+      
+      
+      if(axiosResponse.status == 200){
+        setResponseBddStatus(200);
+      }else{
+        console.log("save data doesnt work");
+      }
+      
+      
+      
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  
+  if(responseBddStatus===200){
+    return <Navigate to='/'/>
+  }
+ 
+
 
   return (
     <ThemeProvider theme={theme}>
