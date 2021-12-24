@@ -16,7 +16,7 @@ const Footer = () => {
           WeCare
         </Link>{" "}
         {new Date().getFullYear()}
-        {"."}
+        {". by Mowafag, Cédric, Arnaud"}
       </Typography>
     </div>
   );

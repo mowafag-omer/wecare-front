@@ -1,4 +1,3 @@
-   
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -11,20 +10,67 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { Link as Lien } from 'react-router-dom'
+import { Link as Lien, Navigate } from 'react-router-dom'
+import api from "../../utils/api"
 
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const [errPass, seterrPass] = React.useState<String | null>(null)
+  const [isErrorEmail, setIsErrorEmail] = React.useState<String | null>(null)
+  const [responseBddOk,setResponseBddOk]= React.useState<Boolean>(false);
+  const [responseBddStatus,setResponseBddStatus]= React.useState<Number>(404);
+
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
+    const body = {
       email: data.get('email'),
-      password: data.get('password'),
-    });
-  };
+      password: data.get('password')
+    }
+
+    if(!String(data.get('email')).length) {      
+      setIsErrorEmail('Your email is invalid or empty!')
+      return false
+    } else {
+      setIsErrorEmail(null)
+    }
+
+    if(data.get('password') !== data.get('confirm-password')) {
+      seterrPass('the password doesn\'t match !')
+      return false
+    } else {
+      seterrPass(null)
+    }
+
+    try {
+      const axiosResponse = await api.post("/users/auth/register", body)
+      
+      console.log(axiosResponse.data);
+      console.log(axiosResponse.status);
+      setResponseBddStatus(axiosResponse.status)
+      
+      
+      if(axiosResponse.status == 201){
+        setResponseBddStatus(201);
+      }else{
+        console.log("save data doesnt work");
+      }
+      
+      
+      
+    } catch (err) {
+      console.error(err)
+    }
+  }
+
+  
+  if(responseBddStatus===201){
+    return <Navigate to='/'/>
+  }
+ 
 
   return (
     <ThemeProvider theme={theme}>
@@ -46,39 +92,21 @@ export default function SignUp() {
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error={isErrorEmail ? true : false}
                   required
                   fullWidth
                   id="email"
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  helperText={isErrorEmail ? isErrorEmail : null}
                 />
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error={errPass ? true : false}
                   required
                   fullWidth
                   name="password"
@@ -90,6 +118,7 @@ export default function SignUp() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
+                  error={errPass ? true : false}
                   required
                   fullWidth
                   name="confirm-password"
