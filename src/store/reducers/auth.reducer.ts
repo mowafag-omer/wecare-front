@@ -1,33 +1,33 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, LOGIN_SUCCESS, LOGIN_FAIL } from '../types'
-import {action} from "../types/type"
+import { userStore } from "../types/"
 
-const token = localStorage.getItem("token") || null
+// const initialState = token ? {isAuth: true, token} : {isAuth: false, token: null} 
 
-const initialState = token ? {isAuth: true, token} : {isAuth: false, token: null} 
 
-export default function authReducer(state = initialState, action: action) {
-  switch(action.type) {
-    case REGISTER_SUCCESS:
-    return {
-      ...state,
-      isAuth: false
-    };
-    case REGISTER_FAIL:
+
+const initialState = {
+  token: null,
+  isLogged: false
+};
+
+
+
+export default function authReducer(state: userStore = initialState, action: {type: string, payload: object | string | boolean}) {
+  const {type, payload} = action;
+
+  switch (type) {
+    case "LOGIN":
       return {
-        ...state,
-        isAuth: false
-      };
-    case LOGIN_SUCCESS:
+          ...state,
+          token: payload,
+          isLogged: true
+      }
+    case "LOGOUT":
       return {
-        token: action.payload,
-        isAuth: true
-      };
-    case LOGIN_FAIL:
-      return {
-        token: null,
-        isAuth: false
-      };
+          token: null,
+          isLogged: false
+      }
     default:
       return state;
-  }
+      break;
+}
 }

@@ -1,7 +1,15 @@
-export const REGISTER_SUCCESS = "REGISTER_SUCCESS"
-export const REGISTER_FAIL = "REGISTER_FAIL"
-export const LOGIN_SUCCESS = "LOGIN_SUCCESS"
-export const LOGIN_FAIL = "LOGIN_FAIL"
+export type action = {
+  type: string,
+  payload: object
+}
 
-export const SET_MESSAGE = "SET_MESSAGE"
-export const CLEAR_MESSAGE = "CLEAR_MESSAGE"
+export type user = {
+  email: string,
+  password: string,
+  access_token: string
+}
+
+export type userStore = {
+  token: user | null,
+  isLogged: boolean
+}

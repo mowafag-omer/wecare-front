@@ -11,11 +11,15 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { logout } from '../../../store/actions/auth.action';
+import { useDispatch } from 'react-redux';
+import api from '../../utils/api';
 
 const pages = ['Dashboard', 'My Appointments'];
 const settings = ['Profile', 'Account', 'Logout'];
 
 const Navbar = () => {
+  const dispatch = useDispatch()
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -33,6 +37,23 @@ const Navbar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const handleLogout = async () => {
+    try {
+      console.log("start logout");
+      
+      const axiosResponse = await api.get("/users/auth/logout")
+      console.log("axiosResponse===>",axiosResponse.status);
+      if(axiosResponse.status === 200 || axiosResponse.status === 401) {
+        dispatch(logout())
+      }
+      handleCloseUserMenu()
+
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
 
   return (
     <AppBar position="static">
@@ -127,7 +148,12 @@ const Navbar = () => {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                  <Typography 
+                  textAlign="center"
+                  onClick={() => setting === 'Logout' ? handleLogout() : null}                  
+                  >  
+                  {setting}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>

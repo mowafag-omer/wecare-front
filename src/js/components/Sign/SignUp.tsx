@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useSelector, useDispatch } from "react-redux";
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -20,6 +21,7 @@ export default function SignUp() {
   const [isErrorEmail, setIsErrorEmail] = React.useState<String | null>(null)
   const [responseBddStatus,setResponseBddStatus]= React.useState<Number>(404);
 
+  const dispatch = useDispatch()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -47,10 +49,12 @@ export default function SignUp() {
     try {
       const axiosResponse = await api.post("/users/auth/register", body)
       
-      console.log(axiosResponse.data);
+      console.log("axiosResponse ==>",axiosResponse.data);
+      const user = axiosResponse.data
       console.log(axiosResponse.status);
       setResponseBddStatus(axiosResponse.status)
       
+      // dispatch(register(user))
       
       if(axiosResponse.status === 201){
         setResponseBddStatus(201);

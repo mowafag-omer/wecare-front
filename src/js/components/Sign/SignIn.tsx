@@ -15,16 +15,18 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { Link as Lien, Navigate } from 'react-router-dom'
 import api from "../../utils/api" 
-// import LOGIN_SUCCESS from '../../..store/types'
+// import LOGIN_SUCCESS from '../../..store/types' 
+import { useDispatch } from "react-redux"
+import { login } from "../../../store/actions/auth.action"
 
 const theme = createTheme();
 
 export default function SignIn() {
-  // const dispatch = useDispatch()
   const [errPass, seterrPass] = React.useState<String | null>(null)
   const [isErrorEmail, setIsErrorEmail] = React.useState<String | null>(null)
   const [responseBddStatus,setResponseBddStatus]= React.useState<Number | null>(null);
 
+  const dispatch = useDispatch()
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -51,12 +53,13 @@ export default function SignIn() {
 
     try {
       const axiosResponse = await api.post("/users/auth/login",body)
+      console.log("axiosResponse.headers.authorization===>",axiosResponse.headers.authorization.substring(7, axiosResponse.headers.authorization.length));
+      const user: any = axiosResponse.headers.authorization.substring(7, axiosResponse.headers.authorization.length)
       
-      console.log(axiosResponse.data);
-      console.log('statuslog', axiosResponse.status);
       setResponseBddStatus(axiosResponse.status)
       
-      
+      dispatch(login(user))
+
       if(axiosResponse.status === 200){
         setResponseBddStatus(200);
       }else{

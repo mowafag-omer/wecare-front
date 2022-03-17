@@ -1,4 +1,3 @@
-import React from 'react'
 import Navbar from './partials/Navbar'
 import Footer from './partials/Footer'
 import GetAllUsers from '../components/GetAllUsers'
@@ -8,6 +7,8 @@ import GetAllUsers from '../components/GetAllUsers'
 
 
 const HomePage = () => {
+ 
+
   return (
     <div>
       <Navbar/>

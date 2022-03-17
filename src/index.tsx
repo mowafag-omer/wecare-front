@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import App from './App';
 import { createStore } from 'redux';
-import indexReducer from './store/reducers/index.reducer';
+import indexReducer from './store';
 import {BrowserRouter} from 'react-router-dom'
 
 if (typeof window !== 'undefined') {

@@ -8,4 +8,4 @@ import path from 'path';
 
 
 // export const NODE_ENV = process.env.NODE_ENV
-export const API_base_URL = process.env.API_base_URL || 'http://localhost:4001/'
+export const API_base_URL = process.env.API_base_URL || 'http://localhost:4001/api/v1'
